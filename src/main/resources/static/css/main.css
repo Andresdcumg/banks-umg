@@ -1,0 +1,21 @@
+.site-first-color {
+background: #136487;
+}
+
+.site-second-color {
+background: #A22828;
+color: #ffffff;
+}
+
+.navbar {
+background-color: #1d6486 !important;
+}
+
+.navbar-brand .logo {
+max-width: 100px;
+}
+
+#navbarNav {
+    justify-content: space-between;
+}
+
