@@ -14,11 +14,20 @@ public class Pago {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long IdPago;
 
-    @Column(name = "IdConvenio", nullable = false)
-    private long idConvenio;
+    @Column(name = "IdPrestamo", nullable = true)
+    private long IdPrestamo;
 
-    @Column(name = "solicitud", nullable = false)
-    private long solicitud;
+    @Column(name = "IdServicio", nullable = true)
+    private long IdServicio;
+
+    @Column(name = "IdCuenta", nullable = false)
+    private long IdCuenta;
+
+    @Column(name = "correlativo", nullable = false)
+    private String correlativo;
+
+    @Column(name = "monto", nullable = false)
+    private float monto;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -33,20 +42,44 @@ public class Pago {
         IdPago = idPago;
     }
 
-    public long getIdConvenio() {
-        return idConvenio;
+    public long getIdPrestamo() {
+        return IdPrestamo;
     }
 
-    public void setIdConvenio(long idConvenio) {
-        this.idConvenio = idConvenio;
+    public void setIdPrestamo(long idPrestamo) {
+        IdPrestamo = idPrestamo;
     }
 
-    public long getSolicitud() {
-        return solicitud;
+    public long getIdServicio() {
+        return IdServicio;
     }
 
-    public void setSolicitud(long solicitud) {
-        this.solicitud = solicitud;
+    public void setIdServicio(long idServicio) {
+        IdServicio = idServicio;
+    }
+
+    public long getIdCuenta() {
+        return IdCuenta;
+    }
+
+    public void setIdCuenta(long idCuenta) {
+        IdCuenta = idCuenta;
+    }
+
+    public String getCorrelativo() {
+        return correlativo;
+    }
+
+    public void setCorrelativo(String correlativo) {
+        this.correlativo = correlativo;
+    }
+
+    public float getMonto() {
+        return monto;
+    }
+
+    public void setMonto(float monto) {
+        this.monto = monto;
     }
 
     public Date getFecha() {
