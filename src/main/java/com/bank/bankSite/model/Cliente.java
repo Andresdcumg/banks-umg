@@ -5,7 +5,7 @@ import javax.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "Cliente")
+@Table(name = "cliente")
 @EntityListeners(AuditingEntityListener.class)
 public class Cliente {
     @Id
@@ -29,6 +29,9 @@ public class Cliente {
 
     @Column(name = "Email", nullable = false)
     private String email;
+
+    @Column(name = "IdBanco", nullable = false)
+    private long idBanco;
 
     @Override
     public String toString() {
@@ -97,5 +100,13 @@ public class Cliente {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public long getIdBanco() {
+        return idBanco;
+    }
+
+    public void setIdBanco(long idBanco) {
+        this.idBanco = idBanco;
     }
 }
