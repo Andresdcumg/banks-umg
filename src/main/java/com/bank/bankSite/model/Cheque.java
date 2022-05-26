@@ -1,8 +1,10 @@
 package com.bank.bankSite.model;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "cheque")
@@ -12,11 +14,25 @@ public class Cheque {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long IdCheque;
 
-    @Column(name = "IdCliente", nullable = false)
-    private long idCliente;
+    @Column(name = "IdCuenta", nullable = false)
+    private long idCuenta;
 
-    @Column(name = "cantidadcheque", nullable = false)
-    private float cantidadCheque;
+    @Column(name = "receptor", nullable = false)
+    private String receptor;
+
+    @Column(name = "monto", nullable = false)
+    private float monto;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "creadoEl", nullable = false)
+    private Date creadoEl;
+
+    @Column(name = "cobradoEl", nullable = true)
+    private Date cobradoEl;
+
+    @Column(name = "rechazadoEl", nullable = true)
+    private Date rechazadoEl;
 
     public long getIdCheque() {
         return IdCheque;
@@ -26,19 +42,51 @@ public class Cheque {
         IdCheque = idCheque;
     }
 
-    public long getIdCliente() {
-        return idCliente;
+    public long getIdCuenta() {
+        return idCuenta;
     }
 
-    public void setIdCliente(long idCliente) {
-        this.idCliente = idCliente;
+    public void setIdCuenta(long idCuenta) {
+        this.idCuenta = idCuenta;
     }
 
-    public float getCantidadCheque() {
-        return cantidadCheque;
+    public String getReceptor() {
+        return receptor;
     }
 
-    public void setCantidadCheque(float cantidadCheque) {
-        this.cantidadCheque = cantidadCheque;
+    public void setReceptor(String receptor) {
+        this.receptor = receptor;
+    }
+
+    public float getMonto() {
+        return monto;
+    }
+
+    public void setMonto(float monto) {
+        this.monto = monto;
+    }
+
+    public Date getCreadoEl() {
+        return creadoEl;
+    }
+
+    public void setCreadoEl(Date creadoEl) {
+        this.creadoEl = creadoEl;
+    }
+
+    public Date getCobradoEl() {
+        return cobradoEl;
+    }
+
+    public void setCobradoEl(Date cobradoEl) {
+        this.cobradoEl = cobradoEl;
+    }
+
+    public Date getRechazadoEl() {
+        return rechazadoEl;
+    }
+
+    public void setRechazadoEl(Date rechazadoEl) {
+        this.rechazadoEl = rechazadoEl;
     }
 }

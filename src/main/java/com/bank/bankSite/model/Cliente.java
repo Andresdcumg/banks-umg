@@ -12,22 +12,22 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long IdCliente;
 
-    @Column(name = "Nombre", nullable = false)
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column(name = "Apellidos", nullable = true)
+    @Column(name = "apellido", nullable = true)
     private String apellido;
 
-    @Column(name = "Direccion", nullable = false)
+    @Column(name = "direccion", nullable = false)
     private String direccion;
 
-    @Column(name = "Telefono", nullable = false)
+    @Column(name = "telefono", nullable = false)
     private String telefono;
 
-    @Column(name = "Password", nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "Email", nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "IdBanco", nullable = false)

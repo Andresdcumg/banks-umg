@@ -5,15 +5,21 @@ import javax.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "monetaria")
+@Table(name = "cuenta")
 @EntityListeners(AuditingEntityListener.class)
-public class Monetaria {
+public class Cuenta {
+    public static final String TIPO_MONETARIA = "monetaria";
+    public static final String TIPO_AHORRO = "ahorro";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long IdMon;
 
     @Column(name = "IdCliente", nullable = false)
     private long idCliente;
+
+    @Column(name = "tipo", nullable = false)
+    private String tipo = TIPO_MONETARIA;
 
     @Column(name = "Saldo", nullable = false)
     private float saldo;

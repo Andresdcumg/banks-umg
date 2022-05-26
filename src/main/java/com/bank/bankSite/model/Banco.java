@@ -5,20 +5,20 @@ import javax.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "Banco")
+@Table(name = "banco")
 @EntityListeners(AuditingEntityListener.class)
 public class Banco {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long IdBanco;
 
-    @Column(name = "Nombre", nullable = false)
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column(name = "Direccion", nullable = false)
+    @Column(name = "direccion", nullable = false)
     private String direccion;
 
-    @Column(name = "Telefono", nullable = false)
+    @Column(name = "telefono", nullable = false)
     private String telefono;
 
     @Override
