@@ -159,7 +159,11 @@
             dataType: 'json',
             contentType: 'application/json',
             success: function (data) {
-                alert("Tu sugerencia ha sido guardada, gracias!");
+                if (confirm("Tu sugerencia ha sido guardada, gracias!") == true) {
+                  location.reload();
+                } else {
+                  location.reload();
+                }
             },
             data: JSON.stringify(sugerencia)
         });
