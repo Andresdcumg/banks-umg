@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.wilmertorres.com">
+
+<head th:replace="fragments/general.html :: headerfiles"></head>
+<body>
+<nav th:replace="fragments/general.html :: header"></nav>
+
+<main role="main" class="container">
+    <div id="acerca" class="row pt-5 pb-3">
+        <div class="col-12">
+            <div class="text-center">
+                <h1>Bienvenido al Banco de Guatemala</h1>
+                <img th:src="@{/img/logo_banguat.png}">
+            </div>
+
+            <p>
+                El Banco de Guatemala (BANGUAT) es el banco central de la República de Guatemala. Es una entidad estatal
+                autónoma con patrimonio propio capaz de adquirir derechos y contraer obligaciones; actúa como el
+                encargado de centralizar los fondos de las instituciones financieras que conforman el sistema
+                financiero nacional (incluyendo el sistema bancario nacional), también es el emisor de la moneda
+                nacional denominada Quetzal y contribuye a la creación y mantenimiento de las mejores condiciones para
+                el desarrollo de la economía nacional. Este órgano se rige por el artículo 132 de la Constitución y su
+                Ley Orgánica.
+            </p>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-12">
+                    <h3>Misión</h3>
+                    <p>"Promover la estabilidad en el nivel general de precios".</p>
+                </div>
+                <div class="col-12">
+                    <h3>Visión</h3>
+                    <p>"Contribuir a la creación y mantenimiento de las condiciones más favorables al desarrollo
+                        ordenado de la
+                        economía nacional, para lo cual, propiciará las condiciones monetarias, cambiarias y crediticias
+                        que
+                        promuevan la estabilidad en el nivel general de precios".
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <h3>Funciones</h3>
+            <p>
+                El Banco de Guatemala tiene, entre otras que determina su Ley Orgánica, las funciones siguientes:
+                <br>
+                a) Ser el único emisor de la moneda nacional;
+                <br>
+                b) Procurar que se mantenga un nivel adecuado de liquidez del sistema bancario, mediante la utilización
+                de los instrumentos previstos en su Ley Orgánica;
+                <br>
+                c) Procurar el buen funcionamiento del sistema de pagos;
+                <br>
+                d) Recibir en depósito los encajes bancarios y los depósitos legales a que se refiere su Ley Orgánica;
+                <br>
+                e) Administrar las reservas monetarias internacionales, de acuerdo con los lineamientos que dicte la
+                Junta Monetaria; y,
+                <br>
+                f) Las demás funciones compatibles con su naturaleza de Banco Central que le sean asignadas por mandato
+                legal.
+            </p>
+        </div>
+
+        <label>Email</label>
+        <input id="email" type="text"/>
+        <label>Password</label>
+        <input id="password" type="password"/>
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="cambios" class="row pb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Tipos de cambio de monedas</h2>
+        </div>
+        <div class="col-sm-3">
+            <!-- Dolar a Quetzal Currency Converter Script - FxExchangeRate.com  -->
+            <div style="font-size:16px; font-family: sans-serif,Arial, Helvetica;width:278px; line-height:24px;border:1px solid #2D6AB4;background-color:#FFFFFF;margin:0px auto;">
+                <div style="background-color:#2D6AB4;height:2.2rem;color:#FFFFFF; font-weight:bold;text-align:left;padding:6px 0 0 6px; max-width:100%;">
+                    <i style="background-size: contain;background-position: 50%;background-repeat: no-repeat; position: relative;display: inline-block;width: 1.33333333em;line-height: 1em;
+padding:0 8px 0 0px;font-size:18px;background-image:url(https://w.fxexchangerate.com/static/flags/usd.webp);">&nbsp;</i><a
+                        rel="nofollow" style="color:#FFFFFF;padding-left:5px;text-decoration:none;"
+                        href="https://es.fxexchangerate.com/usd/">Dólar estadounidense</a></div>
+                <script type="text/javascript"
+                        src="https://w.fxexchangerate.com/converter.php?fm=USD&ft=GTQ,&lg=es&am=1&ty=2"></script>
+            </div><!--  End of Currency Converter Script -  FxExchangeRate.com -->
+        </div>
+        <div class="col-sm-3">
+            <!-- Euro a Quetzal Currency Converter Script - FxExchangeRate.com  -->
+            <div style="font-size:16px; font-family: sans-serif,Arial, Helvetica;width:278px; line-height:24px;border:1px solid #2D6AB4;background-color:#FFFFFF;margin:0px auto;">
+                <div style="background-color:#2D6AB4;height:2.2rem;color:#FFFFFF; font-weight:bold;text-align:left;padding:6px 0 0 6px; max-width:100%;">
+                    <i style="background-size: contain;background-position: 50%;background-repeat: no-repeat; position: relative;display: inline-block;width: 1.33333333em;line-height: 1em;
+padding:0 8px 0 0px;font-size:18px;background-image:url(https://w.fxexchangerate.com/static/flags/eur.webp);">&nbsp;</i><a
+                        rel="nofollow" style="color:#FFFFFF;padding-left:5px;text-decoration:none;"
+                        href="https://es.fxexchangerate.com/eur/">Euro</a></div>
+                <script type="text/javascript"
+                        src="https://w.fxexchangerate.com/converter.php?fm=EUR&ft=GTQ,&lg=es&am=1&ty=2"></script>
+            </div><!--  End of Currency Converter Script -  FxExchangeRate.com -->
+        </div>
+        <div class="col-sm-3">
+            <!-- Peso Mexicano a Quetzal Currency Converter Script - FxExchangeRate.com  -->
+            <div style="font-size:16px; font-family: sans-serif,Arial, Helvetica;width:278px; line-height:24px;border:1px solid #2D6AB4;background-color:#FFFFFF;margin:0px auto;">
+                <div style="background-color:#2D6AB4;height:2.2rem;color:#FFFFFF; font-weight:bold;text-align:left;padding:6px 0 0 6px; max-width:100%;">
+                    <i style="background-size: contain;background-position: 50%;background-repeat: no-repeat; position: relative;display: inline-block;width: 1.33333333em;line-height: 1em;
+padding:0 8px 0 0px;font-size:18px;background-image:url(https://w.fxexchangerate.com/static/flags/mxn.webp);">&nbsp;</i><a
+                        rel="nofollow" style="color:#FFFFFF;padding-left:5px;text-decoration:none;"
+                        href="https://es.fxexchangerate.com/mxn/">Peso mexicano</a></div>
+                <script type="text/javascript"
+                        src="https://w.fxexchangerate.com/converter.php?fm=MXN&ft=GTQ,&lg=es&am=1&ty=2"></script>
+            </div><!--  End of Currency Converter Script -  FxExchangeRate.com -->
+        </div>
+        <div class="col-sm-3">
+            <!-- BTC a Quetzal Currency Converter Script - FxExchangeRate.com  -->
+            <div style="font-size:16px; font-family: sans-serif,Arial, Helvetica;width:278px; line-height:24px;border:1px solid #2D6AB4;background-color:#FFFFFF;margin:0px auto;">
+                <div style="background-color:#2D6AB4;height:2.2rem;color:#FFFFFF; font-weight:bold;text-align:left;padding:6px 0 0 6px; max-width:100%;">
+                    <i style="background-size: contain;background-position: 50%;background-repeat: no-repeat; position: relative;display: inline-block;width: 1.33333333em;line-height: 1em;
+padding:0 8px 0 0px;font-size:18px;background-image:url(https://w.fxexchangerate.com/static/flags/btc.webp);">&nbsp;</i><a
+                        rel="nofollow" style="color:#FFFFFF;padding-left:5px;text-decoration:none;"
+                        href="https://es.fxexchangerate.com/btc/">Bitcoin</a></div>
+                <script type="text/javascript"
+                        src="https://w.fxexchangerate.com/converter.php?fm=BTC&ft=GTQ,&lg=es&am=1&ty=2"></script>
+            </div><!--  End of Currency Converter Script -  FxExchangeRate.com -->
+        </div>
+    </div>
+</main>
+<!-- /.container -->
+</body>
+<div th:replace="fragments/general.html :: footer"></div>
+</html>
