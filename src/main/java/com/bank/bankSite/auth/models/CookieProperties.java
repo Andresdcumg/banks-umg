@@ -1,2 +1,12 @@
-package com.bank.bankSite.auth.models;public class CookieProperties {
+package com.bank.bankSite.auth.models;
+
+import lombok.Data;
+
+@Data
+public class CookieProperties {
+    String domain;
+    String path;
+    boolean httpOnly;
+    boolean secure;
+    int maxAgeInMinutes;
 }

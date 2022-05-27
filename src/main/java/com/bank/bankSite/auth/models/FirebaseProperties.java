@@ -1,2 +1,13 @@
-package com.bank.bankSite.auth.models;public class FirebaseProperties {
+package com.bank.bankSite.auth.models;
+
+import lombok.Data;
+
+@Data
+public class FirebaseProperties {
+
+    int sessionExpiryInDays;
+    String databaseUrl;
+    boolean enableStrictServerSession;
+    boolean enableCheckSessionRevoked;
+    boolean enableLogoutEverywhere;
 }

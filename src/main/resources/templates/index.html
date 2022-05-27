@@ -2,9 +2,7 @@
 <html lang="en" xmlns:th="http://www.wilmertorres.com">
 
 <head th:replace="fragments/general.html :: headerfiles"></head>
-
 <body>
-
 <nav th:replace="fragments/general.html :: header"></nav>
 
 <main role="main" class="container">
@@ -33,8 +31,10 @@
                 </div>
                 <div class="col-12">
                     <h3>Visión</h3>
-                    <p>"Contribuir a la creación y mantenimiento de las condiciones más favorables al desarrollo ordenado de la
-                        economía nacional, para lo cual, propiciará las condiciones monetarias, cambiarias y crediticias que
+                    <p>"Contribuir a la creación y mantenimiento de las condiciones más favorables al desarrollo
+                        ordenado de la
+                        economía nacional, para lo cual, propiciará las condiciones monetarias, cambiarias y crediticias
+                        que
                         promuevan la estabilidad en el nivel general de precios".
                     </p>
                 </div>
@@ -61,6 +61,12 @@
                 legal.
             </p>
         </div>
+
+        <label>Email</label>
+        <input id="email" type="text"/>
+        <label>Password</label>
+        <input id="password" type="password"/>
+        <button onclick="login()">Login</button>
     </div>
 
     <div id="cambios" class="row pb-5">
@@ -118,15 +124,6 @@ padding:0 8px 0 0px;font-size:18px;background-image:url(https://w.fxexchangerate
     </div>
 </main>
 <!-- /.container -->
-
-
-<div th:replace="fragments/general.html :: footer"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
-        crossorigin="anonymous"></script>
 </body>
+<div th:replace="fragments/general.html :: footer"></div>
 </html>
