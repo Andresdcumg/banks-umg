@@ -67,6 +67,16 @@ public class CuentaController {
         return chequeRepository.findByCuenta(cuenta);
     }
 
+    @GetMapping("v2/cuentas/{id}/pagos")
+    public List<Pago> getAllPagos(@PathVariable(value = "id") Long cuentaId) throws ResourceNotFoundException {
+        Cuenta cuenta =
+                cuentaRepository
+                        .findById(cuentaId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Cuenta not found on :: " + cuentaId));
+
+        return pagoRepository.findByCuenta(cuenta);
+    }
+
     /**
      * Delete product map.
      *

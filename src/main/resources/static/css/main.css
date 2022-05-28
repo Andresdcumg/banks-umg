@@ -44,7 +44,7 @@ max-width: 100px;
     background-color: rgba(0,0,0,.2);
 }
 
-.cheque-container {
+.cheque-container, .pago-container {
     border: 3px solid indianred;
     border-radius: 15px;
     padding: 10px;

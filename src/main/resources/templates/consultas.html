@@ -55,7 +55,14 @@
                 "    <h4>Cuenta " + cuenta.tipo + " NO. " + cuenta.idMon + "</h4>" +
                 "    <p>Saldo actual: Q" + cuenta.saldo +"</p>" +
                 "    <p>Banco: <strong>" + bancoName +"</strong></p>" +
+                "    <h5><strong>Cheques de la cuenta</strong></h5>" +
+                "    <input type='text' id='cheque-rep-" + cuenta.idMon + "' placeholder='Ingrese el receptor'></input>" +
+                "    <input type='number' id='cheque-mon-" + cuenta.idMon + "' placeholder='Ingrese el monto'></input>" +
+                "    <a class='add-cheque' data-cuenta='" + cuenta.idMon + "'>Agregar nuevo cheque</a>" +
+                "    <div class='cheques-container-" + cuenta.idMon + " mt-3 row'></div>" +
                 "</div></div>");
+
+                getCheques(cuenta.idMon);
               });
           }
         });
@@ -81,14 +88,11 @@
                 "    <h4>Cuenta " + cuenta.tipo + " NO. " + cuenta.idMon + "</h4>" +
                 "    <p>Saldo actual: Q" + cuenta.saldo +"</p>" +
                 "    <p>Banco: <strong>" + bancoName +"</strong></p>" +
-                "    <h5><strong>Cheques de la cuenta</strong></h5>" +
-                "    <input type='text' id='cheque-rep-" + cuenta.idMon + "' placeholder='Ingrese el receptor'></input>" +
-                "    <input type='number' id='cheque-mon-" + cuenta.idMon + "' placeholder='Ingrese el monto'></input>" +
-                "    <a class='add-cheque' data-cuenta='" + cuenta.idMon + "'>Agregar nuevo cheque</a>" +
-                "    <div class='cheques-container-" + cuenta.idMon + " mt-3 row'></div>" +
+                "    <h5><strong>Pagos realizados</strong></h5>" +
+                "    <div class='pagos-container-" + cuenta.idMon + " mt-3 row'></div>" +
                 "</div></div>");
 
-                getCheques(cuenta.idMon);
+                getPagos(cuenta.idMon);
               });
           }
         });
@@ -156,6 +160,49 @@
         });
     }
 
+    function getPagos(cuenta) {
+        $('.pagos-container-' + cuenta).empty();
+
+        $.ajax
+        ({
+          type: "GET",
+          url: "/api/v2/cuentas/" + cuenta + "/pagos",
+          dataType: 'json',
+          headers: {
+            "Authorization": "Bearer " + jwToken
+          },
+          success: function (data) {
+            console.log(data);
+
+            data.forEach(function(pago){
+                var pagoContent = "" +
+                "<div class='col-12'><div class='pago-container'>" +
+                "    <h6>Pago NO. " + pago.idPago + "</h6>" +
+                "    <p>Correlativo " + pago.monto +"</p>" +
+                "    <p>Monto: Q" + pago.monto +"</p>" +
+                "    <p>Pagado el: " + pago.fecha +"</p>";
+
+                if ((Boolean) (pago.prestamo)) {
+                    pagoContent += "   <p>Pago correspondiente al prestamo NO. " + pago.prestamo.idPrestamo +"</p>";
+                }
+
+                if ((Boolean) (pago.servicio)) {
+                    pagoContent += "   <p>Pago correspondiente al servicio NO. " + pago.servicio.idServicio +"</p>";
+                }
+
+                if ((Boolean) (pago.tarjeta)) {
+                    pagoContent += "   <p>Pago correspondiente a la tarjeta NO. " + pago.tarjeta.idTarjeta +"</p>";
+                }
+
+                pagoContent += "" +
+                "</div></div>";
+
+                $('.pagos-container-' + cuenta).append(pagoContent);
+              });
+          }
+        });
+    }
+
     function addCheque(cuenta) {
         var receptor = $('#cheque-rep-' + cuenta).val();
         var monto = $('#cheque-mon-' + cuenta).val();
@@ -209,6 +256,7 @@
             addCheque(cuenta);
         });
     });
+
 
 
 </script>
