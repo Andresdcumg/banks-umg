@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.wilmertorres.com">
+
+<head th:replace="fragments/loggedGeneral.html :: headerfiles"></head>
+<body>
+<nav th:replace="fragments/loggedGeneral.html :: header"></nav>
+
+<main role="main" class="container">
+    <div id="first-content" class="row pt-5 pb-3">
+        <div class="col-12">
+            <h1 class="text-center">Consultas</h1>
+
+            <p>
+                A continuación se te presentan todas las consultas disponibles en la banca virtual
+            </p>
+        </div>
+        <div class="col-12 mt-4">
+            <h2>Consulta de saldos</h2>
+            <div class="saldos-container mt-3 row"></div>
+        </div>
+        <div class="col-12 mt-4">
+            <h2>Consulta de estado de cuenta y cheques</h2>
+
+            <div class="cuentas-container mt-3 row"></div>
+        </div>
+        <div class="col-12 mt-4">
+            <h2>Consulta de Tarjeta de credito</h2>
+
+            <div class="tarjetas-container mt-3 row"></div>
+        </div>
+    </div>
+</main>
+<!-- /.container -->
+</body>
+<div th:replace="fragments/loggedGeneral.html :: footer"></div>
+
+<script>
+    function getSaldos() {
+        $('.saldos-container').empty();
+
+        $.ajax
+        ({
+          type: "GET",
+          url: "/api/v2/clientes/" + clienteId + "/cuentas",
+          dataType: 'json',
+          headers: {
+            "Authorization": "Bearer " + jwToken
+          },
+          success: function (data) {
+            console.log(data);
+
+            data.forEach(function(cuenta){
+                $('.saldos-container').append("" +
+                "<div class='col-6'><div class='cuenta-container'>" +
+                "    <h4>Cuenta " + cuenta.tipo + " NO. " + cuenta.idMon + "</h4>" +
+                "    <p>Saldo actual: Q" + cuenta.saldo +"</p>" +
+                "    <p>Banco: <strong>" + bancoName +"</strong></p>" +
+                "</div></div>");
+              });
+          }
+        });
+    }
+
+    function getCuentas() {
+        $('.cuentas-container').empty();
+
+        $.ajax
+        ({
+          type: "GET",
+          url: "/api/v2/clientes/" + clienteId + "/cuentas",
+          dataType: 'json',
+          headers: {
+            "Authorization": "Bearer " + jwToken
+          },
+          success: function (data) {
+            console.log(data);
+
+            data.forEach(function(cuenta){
+                $('.cuentas-container').append("" +
+                "<div class='col-6'><div class='cuenta-container'>" +
+                "    <h4>Cuenta " + cuenta.tipo + " NO. " + cuenta.idMon + "</h4>" +
+                "    <p>Saldo actual: Q" + cuenta.saldo +"</p>" +
+                "    <p>Banco: <strong>" + bancoName +"</strong></p>" +
+                "    <h5><strong>Cheques de la cuenta</strong></h5>" +
+                "    <input type='text' id='cheque-rep-" + cuenta.idMon + "' placeholder='Ingrese el receptor'></input>" +
+                "    <input type='number' id='cheque-mon-" + cuenta.idMon + "' placeholder='Ingrese el monto'></input>" +
+                "    <a class='add-cheque' data-cuenta='" + cuenta.idMon + "'>Agregar nuevo cheque</a>" +
+                "    <div class='cheques-container-" + cuenta.idMon + " mt-3 row'></div>" +
+                "</div></div>");
+
+                getCheques(cuenta.idMon);
+              });
+          }
+        });
+    }
+
+    function getTarjetas() {
+        $('.tarjetas-container').empty();
+
+        $.ajax
+        ({
+          type: "GET",
+          url: "/api/v2/clientes/" + clienteId + "/tarjetas",
+          dataType: 'json',
+          headers: {
+            "Authorization": "Bearer " + jwToken
+          },
+          success: function (data) {
+            console.log(data);
+
+            data.forEach(function(tarjeta){
+                $('.tarjetas-container').append("" +
+                "<div class='col-6'><div class='tarjeta-container'>" +
+                "    <h4>Tarjeta credito NO. " + tarjeta.numero + "</h4>" +
+                "    <p>Titular: " + tarjeta.titular +"</p>" +
+                "    <p>Vencimiento: " + tarjeta.vencimiento +"</p>" +
+                "    <p>CVV: " + tarjeta.cvv +"</p>" +
+                "    <p>Monto autorizado: Q" + tarjeta.montoAutorizado +"</p>" +
+                "    <p>Monto usado: Q" + tarjeta.montoUsado +"</p>" +
+                "    <p>Corte: " + tarjeta.corte +"</p>" +
+                "    <p>pago: " + tarjeta.pago +"</p>" +
+                "    <p>Banco: <strong>" + bancoName +"</strong></p>" +
+                "</div></div>");
+              });
+          }
+        });
+    }
+
+    function getCheques(cuenta) {
+        $('.cheques-container-' + cuenta).empty();
+
+        $.ajax
+        ({
+          type: "GET",
+          url: "/api/v2/cuentas/" + cuenta + "/cheques",
+          dataType: 'json',
+          headers: {
+            "Authorization": "Bearer " + jwToken
+          },
+          success: function (data) {
+            console.log(data);
+
+            data.forEach(function(cheque){
+                $('.cheques-container-' + cuenta).append("" +
+                "<div class='col-12'><div class='cheque-container'>" +
+                "    <h6>Cheque NO. " + cheque.idCheque + "</h6>" +
+                "    <p>A favor de " + cheque.receptor +"</p>" +
+                "    <p>Monto: Q" + cheque.monto +"</p>" +
+                "    <p>creadoEl: " + cheque.creadoEl +"</p>" +
+                "    <p>cobradoEl: " + cheque.cobradoEl +"</p>" +
+                "    <p>rechazadoEl: " + cheque.rechazadoEl +"</p>" +
+                "    <p>Banco: <strong>" + bancoName +"</strong></p>" +
+                "</div></div>");
+              });
+          }
+        });
+    }
+
+    function addCheque(cuenta) {
+        var receptor = $('#cheque-rep-' + cuenta).val();
+        var monto = $('#cheque-mon-' + cuenta).val();
+
+        if (receptor === '') {
+            alert('El nombre no puede ir vacío');
+        }
+
+        if (monto <= 0) {
+            alert('El monto debe ser mayor a cero');
+        }
+
+        if ((Boolean) (receptor) && (Boolean) (monto)) {
+            var cheque = {
+                receptor: receptor,
+                monto: monto,
+                creadoEl: new Date(),
+                cobradoEl: null,
+                rechazadoEl: null
+            }
+
+            $.ajax({
+                url: "/api/v2/cuentas/" + cuenta + "/cheques",
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                headers: {
+                    "Authorization": "Bearer " + jwToken
+                  },
+                success: function (data) {
+                    getCheques(cuenta);
+                },
+                data: JSON.stringify(cheque)
+            });
+        }
+    }
+
+    function initPage() {
+        getSaldos();
+        getCuentas();
+        // getCheques();
+        getTarjetas();
+    }
+
+    $(function() {
+        var $body = $('body');
+        verifyUser();
+
+        $body.on('click', '.add-cheque', function() {
+            var cuenta = $(this).attr('data-cuenta');
+            addCheque(cuenta);
+        });
+    });
+
+
+</script>
+</html>

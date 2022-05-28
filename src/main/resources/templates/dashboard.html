@@ -27,10 +27,18 @@
         </div>
         <div class="col-4 mt-4">
             <h2>Tarjetas</h2>
+            <p>
+                <a class="add-tarjeta">Solicitar nueva tarjeta</a>
+            </p>
+
             <div class="tarjetas-container mt-3"></div>
         </div>
         <div class="col-4 mt-4">
             <h2>Prestamos</h2>
+            <p>
+                <a class="add-prestamo">Solicitar nuevo prestamo</a>
+            </p>
+
             <div class="prestamos-container mt-3"></div>
         </div>
     </div>
@@ -38,4 +46,221 @@
 <!-- /.container -->
 </body>
 <div th:replace="fragments/loggedGeneral.html :: footer"></div>
+
+<script>
+    function getCuentas() {
+        $('.cuentas-container').empty();
+
+        $.ajax
+        ({
+          type: "GET",
+          url: "/api/v2/clientes/" + clienteId + "/cuentas",
+          dataType: 'json',
+          headers: {
+            "Authorization": "Bearer " + jwToken
+          },
+          success: function (data) {
+            console.log(data);
+
+            data.forEach(function(cuenta){
+                $('.cuentas-container').append("" +
+                "<div class='cuenta-container'>" +
+                "    <h4>Cuenta " + cuenta.tipo + " NO. " + cuenta.idMon + "</h4>" +
+                "    <p>Saldo actual: Q" + cuenta.saldo +"</p>" +
+                "    <p>Banco: <strong>" + bancoName +"</strong></p>" +
+                "    <input type='number' id='deposito-" + cuenta.idMon + "' placeholder='Ingrese el monto'></input> <a class='depositar-btn' data-tipo='" + cuenta.tipo + "' data-cuenta='" + cuenta.idMon + "'>Depositar</a>" +
+                "</div>");
+              });
+          }
+        });
+    }
+
+    function getTarjetas() {
+        $('.tarjetas-container').empty();
+
+        $.ajax
+        ({
+          type: "GET",
+          url: "/api/v2/clientes/" + clienteId + "/tarjetas",
+          dataType: 'json',
+          headers: {
+            "Authorization": "Bearer " + jwToken
+          },
+          success: function (data) {
+            console.log(data);
+
+            data.forEach(function(tarjeta){
+                $('.tarjetas-container').append("" +
+                "<div class='tarjeta-container'>" +
+                "    <h4>Tarjeta credito NO. " + tarjeta.numero + "</h4>" +
+                "    <p>Titular: " + tarjeta.titular +"</p>" +
+                "    <p>Monto autorizado: Q" + tarjeta.montoAutorizado +"</p>" +
+                "    <p>Monto usado: Q" + tarjeta.montoUsado +"</p>" +
+                "    <p>Banco: <strong>" + bancoName +"</strong></p>" +
+                "</div>");
+              });
+          }
+        });
+    }
+
+    function getPrestamos() {
+        $('.prestamos-container').empty();
+
+        $.ajax
+        ({
+          type: "GET",
+          url: "/api/v2/clientes/" + clienteId + "/prestamos",
+          dataType: 'json',
+          headers: {
+            "Authorization": "Bearer " + jwToken
+          },
+          success: function (data) {
+            console.log(data);
+
+            data.forEach(function(prestamo){
+                $('.prestamos-container').append("" +
+                "<div class='prestamo-container'>" +
+                "    <h4>Prestamo NO. " + prestamo.idPrestamo + "</h4>" +
+                "    <p>Monto autorizado: Q" + prestamo.monto +"</p>" +
+                "    <p>Saldo a pagar: Q" + prestamo.saldo +"</p>" +
+                "    <p>Banco: <strong>" + bancoName +"</strong></p>" +
+                "</div>");
+              });
+          }
+        });
+    }
+
+    function addCuenta(tipo) {
+        var cuenta = {
+            tipo: tipo,
+            saldo: 0,
+            idCliente: clienteId
+        }
+
+        $.ajax({
+            url: "/api/v2/clientes/" + clienteId + "/cuentas",
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            headers: {
+                "Authorization": "Bearer " + jwToken
+              },
+            success: function (data) {
+                getCuentas();
+            },
+            data: JSON.stringify(cuenta)
+        });
+    }
+
+    function addTarjeta() {
+        var tarjeta = {
+            numero: generateRandomInteger(10),
+            titular: clienteName,
+            cvv: generateRandomInteger(3),
+            idCliente: clienteId,
+            vencimiento: new Date(),
+            montoAutorizado: 5000,
+            montoUsado: 0,
+            corte: new Date(),
+            pago: new Date()
+        }
+
+        $.ajax({
+            url: "/api/v2/clientes/" + clienteId + "/tarjetas",
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            headers: {
+                "Authorization": "Bearer " + jwToken
+              },
+            success: function (data) {
+                getTarjetas();
+            },
+            data: JSON.stringify(tarjeta)
+        });
+    }
+
+    function addPrestamo() {
+        var prestamo = {
+            idCliente: clienteId,
+            monto: 5000,
+            saldo: 5000,
+            pago: new Date()
+        }
+
+        $.ajax({
+            url: "/api/v2/clientes/" + clienteId + "/prestamos",
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            headers: {
+                "Authorization": "Bearer " + jwToken
+              },
+            success: function (data) {
+                getPrestamos();
+            },
+            data: JSON.stringify(prestamo)
+        });
+    }
+
+    function depositarCuenta(tipo, cuentaId) {
+        var saldo = $('#deposito-' + cuentaId).val();
+
+        if (saldo > 0) {
+            var cuenta = {
+                tipo: tipo,
+                saldo: saldo,
+                idCliente: clienteId
+            }
+
+            $.ajax({
+                url: "/api/v2/cuentas/" + cuentaId,
+                type: 'put',
+                dataType: 'json',
+                contentType: 'application/json',
+                headers: {
+                    "Authorization": "Bearer " + jwToken
+                  },
+                success: function (data) {
+                    getCuentas();
+                },
+                data: JSON.stringify(cuenta)
+            });
+        } else {
+            alert("El monto a depositar debe ser mayor a 0");
+        }
+    }
+
+    function initPage() {
+        getCuentas();
+        getTarjetas();
+        getPrestamos();
+    }
+
+    $(function() {
+        var $body = $('body');
+        verifyUser();
+
+        $('.add-cuenta').click(function() {
+            var tipo = $(this).data("tipo");
+            addCuenta(tipo);
+        });
+
+        $('.add-tarjeta').click(function() {
+            addTarjeta();
+        });
+
+        $('.add-prestamo').click(function() {
+            addPrestamo();
+        });
+
+        $body.on('click', '.depositar-btn', function() {
+            var tipo = $(this).data("tipo");
+            var cuenta = $(this).data("cuenta");
+            depositarCuenta(tipo, cuenta);
+        });
+    });
+
+
+</script>
 </html>

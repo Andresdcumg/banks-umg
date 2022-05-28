@@ -1,13 +1,9 @@
 package com.bank.bankSite.controller;
 
-import com.bank.bankSite.model.Banco;
-import com.bank.bankSite.model.Cuenta;
-import com.bank.bankSite.model.Cliente;
+import com.bank.bankSite.model.*;
+import com.bank.bankSite.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.bank.bankSite.repository.BancoRepository;
-import com.bank.bankSite.repository.CuentaRepository;
-import com.bank.bankSite.repository.ClienteRepository;
 import com.bank.bankSite.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,6 +22,12 @@ public class ClienteController {
 
     @Autowired
     private CuentaRepository cuentaRepository;
+
+    @Autowired
+    private TarjetaRepository tarjetaRepository;
+
+    @Autowired
+    private PrestamoRepository prestamoRepository;
 
     /**
      * Get all products list.
@@ -79,6 +81,26 @@ public class ClienteController {
         return cuentaRepository.findByCliente(cliente);
     }
 
+    @GetMapping("v2/clientes/{id}/tarjetas")
+    public List<Tarjeta> getAllTarjetas(@PathVariable(value = "id") Long clienteId) throws ResourceNotFoundException {
+        Cliente cliente =
+                clienteRepository
+                        .findById(clienteId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Cliente not found on :: " + clienteId));
+
+        return tarjetaRepository.findByCliente(cliente);
+    }
+
+    @GetMapping("v2/clientes/{id}/prestamos")
+    public List<Prestamo> getAllPrestamos(@PathVariable(value = "id") Long clienteId) throws ResourceNotFoundException {
+        Cliente cliente =
+                clienteRepository
+                        .findById(clienteId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Cliente not found on :: " + clienteId));
+
+        return prestamoRepository.findByCliente(cliente);
+    }
+
     /**
      * Crear cuenta a un usuario.
      *
@@ -100,5 +122,51 @@ public class ClienteController {
         cuentaDetails.setCliente(cliente);
         final Cuenta nuevaCuenta = cuentaRepository.save(cuentaDetails);
         return ResponseEntity.ok(nuevaCuenta);
+    }
+
+    /**
+     * Crear cuenta a un usuario.
+     *
+     * @param clienteId      the product id
+     * @param tarjetaDetails the product details
+     * @return the response entity
+     * @throws ResourceNotFoundException the resource not found exception
+     */
+    @PostMapping("v2/clientes/{id}/tarjetas")
+    public ResponseEntity<Tarjeta> createTarjeta(
+            @PathVariable(value = "id") Long clienteId, @Valid @RequestBody Tarjeta tarjetaDetails)
+            throws ResourceNotFoundException {
+
+        Cliente cliente =
+                clienteRepository
+                        .findById(clienteId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Cliente not found on :: " + clienteId));
+
+        tarjetaDetails.setCliente(cliente);
+        final Tarjeta tarjetaNueva = tarjetaRepository.save(tarjetaDetails);
+        return ResponseEntity.ok(tarjetaNueva);
+    }
+
+    /**
+     * Crear cuenta a un usuario.
+     *
+     * @param clienteId       the product id
+     * @param prestamoDetails the product details
+     * @return the response entity
+     * @throws ResourceNotFoundException the resource not found exception
+     */
+    @PostMapping("v2/clientes/{id}/prestamos")
+    public ResponseEntity<Prestamo> createPrestamo(
+            @PathVariable(value = "id") Long clienteId, @Valid @RequestBody Prestamo prestamoDetails)
+            throws ResourceNotFoundException {
+
+        Cliente cliente =
+                clienteRepository
+                        .findById(clienteId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Cliente not found on :: " + clienteId));
+
+        prestamoDetails.setCliente(cliente);
+        final Prestamo prestamoNuevo = prestamoRepository.save(prestamoDetails);
+        return ResponseEntity.ok(prestamoNuevo);
     }
 }

@@ -15,8 +15,12 @@ import java.util.List;
 public class UserController {
     @GetMapping("/user/dashboard")
     public String dashboardAction(Model model) {
-
         return "dashboard"; //view
+    }
+
+    @GetMapping("/user/consultas")
+    public String consultasAction(Model model) {
+        return "consultas"; //view
     }
 
     @GetMapping("/user/suggestion")
