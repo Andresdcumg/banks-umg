@@ -98,6 +98,7 @@
             // Signed in
             var user = userCredential.user;
             alert('Usuario registrado');
+            extraRegister();
           })
           .catch((error) => {
             var errorCode = error.code;
@@ -143,6 +144,33 @@
         // ...
       }
     });
+    }
+
+    function extraRegister() {
+        var cliente = {
+            nombre: document.getElementById("name").value,
+            apellido: document.getElementById("last-name").value,
+            direccion: document.getElementById("address").value,
+            telefono: document.getElementById("phone").value,
+            email: document.getElementById("email").value,
+            password: btoa(document.getElementById("password").value),
+            IdBanco: document.getElementById("bank").value
+        }
+
+        $.ajax({
+            url: '/api/v1/clientes',
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (data) {
+                if (confirm("Tu cuenta a sido creada con exito") == true) {
+                  location.reload();
+                } else {
+                  location.reload();
+                }
+            },
+            data: JSON.stringify(cliente)
+        });
     }
 
     function suggestion() {

@@ -30,8 +30,12 @@ public class Cliente {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "IdBanco", nullable = false)
-    private long idBanco;
+    @Transient
+    public int idBanco;
+
+    @ManyToOne
+    @JoinColumn(name = "IdBanco")
+    private Banco banco;
 
     @Override
     public String toString() {
@@ -106,7 +110,15 @@ public class Cliente {
         return idBanco;
     }
 
-    public void setIdBanco(long idBanco) {
+    public void setIdBanco(int idBanco) {
         this.idBanco = idBanco;
+    }
+
+    public Banco getBanco() {
+        return banco;
+    }
+
+    public void setBanco(Banco banco) {
+        this.banco = banco;
     }
 }

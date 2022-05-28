@@ -1,15 +1,9 @@
 package com.bank.bankSite.controller;
 
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
-
 import com.bank.bankSite.model.Sugerencia;
-import com.bank.bankSite.repository.SugerenciaRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.bank.bankSite.repository.SugerenciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.bank.bankSite.exception.ResourceNotFoundException;
 
 import javax.validation.Valid;
 
@@ -20,7 +14,6 @@ public class SuggestionController {
     @Autowired
     private SugerenciaRepository sugerenciaRepository;
 
-
     /**
      * Create new sugerencia.
      *
@@ -28,7 +21,7 @@ public class SuggestionController {
      * @return the sugerencia
      */
     @PostMapping("/sugerencias")
-    public Sugerencia createProduct(@Valid @RequestBody Sugerencia sugerencia) {
+    public Sugerencia createSuggestion(@Valid @RequestBody Sugerencia sugerencia) {
         return sugerenciaRepository.save(sugerencia);
     }
 }

@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "convenio")
+@Table(name = "pago")
 @EntityListeners(AuditingEntityListener.class)
 public class Pago {
     @Id
