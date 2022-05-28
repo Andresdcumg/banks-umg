@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.wilmertorres.com">
+
+<head th:replace="fragments/loggedGeneral.html :: headerfiles"></head>
+<body>
+<nav th:replace="fragments/loggedGeneral.html :: header"></nav>
+
+<main role="main" class="container">
+    <div id="first-content" class="row pt-5 pb-3">
+        <div class="col-12">
+            <h1>Hola <span id="username">Usuario</span></h1>
+
+            <p>
+                Este es el dashboard de tu cuenta, aqui podras ver todas las cuentas que tienes, el banco al que estas
+                asociado, realizar consultas, pagos y mucho más.
+            </p>
+        </div>
+        <div class="col-4 mt-4">
+            <h2>Cuentas</h2>
+            <p>
+                Agregar cuenta
+                <a class="add-cuenta" data-tipo="monetaria">Monetaria</a>
+                <a class="add-cuenta" data-tipo="ahorro">Ahorro</a>
+            </p>
+
+            <div class="cuentas-container mt-3"></div>
+        </div>
+        <div class="col-4 mt-4">
+            <h2>Tarjetas</h2>
+            <div class="tarjetas-container mt-3"></div>
+        </div>
+        <div class="col-4 mt-4">
+            <h2>Prestamos</h2>
+            <div class="prestamos-container mt-3"></div>
+        </div>
+    </div>
+</main>
+<!-- /.container -->
+</body>
+<div th:replace="fragments/loggedGeneral.html :: footer"></div>
+</html>

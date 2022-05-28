@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v2")
 public class BankController {
 
     @Autowired

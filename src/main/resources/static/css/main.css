@@ -25,3 +25,17 @@ max-width: 100px;
     margin: 0 auto;
 }
 
+.sticky-btn {
+    position: fixed;
+    right: 15px;
+    bottom: 30px;
+    border-radius: 50px;
+}
+
+.cuenta-container {
+    border: 2px solid cadetblue;
+    padding: 10px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+}
+

@@ -31,6 +31,7 @@
 
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
+
     </script>
 
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -84,11 +85,16 @@
             crossorigin="anonymous"></script>
 
     <script>
-    function getIdToken() {
-        firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
-            console.log(idToken);
-        }).catch(function(error) {
-            // Handle error
+    function verifyUser() {
+        firebase.auth().onAuthStateChanged((user) => {
+          if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/firebase.User
+            var uid = user.uid;
+            console.log('sesion vigente: ' + uid);
+          } else {
+            console.log('No hay sesion vigente');
+          }
         });
     }
 
@@ -99,24 +105,15 @@
             var user = userCredential.user;
             alert('Usuario registrado');
             extraRegister();
+
+            verifyUser();
+            window.location.replace("/user/dashboard");
           })
           .catch((error) => {
             var errorCode = error.code;
             var errorMessage = error.message;
             // ..
           });
-
-          firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        var uid = user.uid;
-        // ...
-      } else {
-        // User is signed out
-        // ...
-      }
-    });
     }
 
     function login() {
@@ -124,7 +121,9 @@
         .auth()
         .signInWithEmailAndPassword(document.getElementById("email").value, document.getElementById("password").value)
         .then(function(result) {
+        verifyUser()
         alert('Sesion iniciada');
+        window.location.replace("/user/dashboard");
         })
         .catch(function (error) {
           // Handle Errors here.
@@ -132,18 +131,6 @@
           var errorMessage = error.message;
           // ...
         });
-
-        firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        var uid = user.uid;
-        // ...
-      } else {
-        // User is signed out
-        // ...
-      }
-    });
     }
 
     function extraRegister() {
@@ -154,7 +141,7 @@
             telefono: document.getElementById("phone").value,
             email: document.getElementById("email").value,
             password: btoa(document.getElementById("password").value),
-            IdBanco: document.getElementById("bank").value
+            idBanco: document.getElementById("bank").value
         }
 
         $.ajax({
@@ -164,9 +151,9 @@
             contentType: 'application/json',
             success: function (data) {
                 if (confirm("Tu cuenta a sido creada con exito") == true) {
-                  location.reload();
+                  window.location.replace("/user/dashboard");
                 } else {
-                  location.reload();
+                  window.location.replace("/user/dashboard");
                 }
             },
             data: JSON.stringify(cliente)
@@ -196,6 +183,7 @@
             data: JSON.stringify(sugerencia)
         });
     }
+
     </script>
 </footer>
 </body>
