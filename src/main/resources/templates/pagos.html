@@ -1,0 +1,307 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.wilmertorres.com">
+
+<head th:replace="fragments/loggedGeneral.html :: headerfiles"></head>
+<body>
+<nav th:replace="fragments/loggedGeneral.html :: header"></nav>
+
+<main role="main" class="container">
+    <div id="first-content" class="row pt-5 pb-3">
+        <div class="col-12">
+            <h1 class="text-center">Pagos</h1>
+
+            <p>
+                En esta sección encontrarás los pagos que puedes realizar con tus cuentas, desde el pago de tarjetas de
+                credito y pestamos hasta servicios como telefonia, agua y electricidad.
+            </p>
+        </div>
+        <div class="col-12 mt-4">
+            <h2>Cuentas disponibles | <small class="cuenta-seleccionada">Ninguna cuenta seleccionada</small></h2>
+            <div class="cuentas-container mt-3 row"></div>
+        </div>
+        <div class="col-6 mt-4">
+            <h2>Tarjetas de credito disponibles para pagar</h2>
+
+            <div class="tarjetas-container mt-3 row"></div>
+        </div>
+        <div class="col-6 mt-4">
+            <h2>Prestamos disponibles para pagar</h2>
+
+            <div class="prestamos-container mt-3"></div>
+        </div>
+        <div class="col-12 mt-4">
+            <h2>Servicios disponibles para pagar</h2>
+
+            <div class="servicios-container mt-3"></div>
+        </div>
+    </div>
+</main>
+<!-- /.container -->
+</body>
+<div th:replace="fragments/loggedGeneral.html :: footer"></div>
+
+<script>
+    var cuentaId = 0;
+    var prestamoId = 0;
+    var servicioId = 0;
+    var tarjetaId = 0;
+
+    function getCuentas() {
+        $('.cuentas-container').empty();
+
+        $.ajax
+        ({
+          type: "GET",
+          url: "/api/v2/clientes/" + clienteId + "/cuentas",
+          dataType: 'json',
+          headers: {
+            "Authorization": "Bearer " + jwToken
+          },
+          success: function (data) {
+            console.log(data);
+
+            data.forEach(function(cuenta){
+                $('.cuentas-container').append("" +
+                "<div class='col-3'><div class='cuenta-container cuenta-container-" + cuenta.idMon + "'>" +
+                "    <h5>Cuenta " + cuenta.tipo + " NO. " + cuenta.idMon + "</h4>" +
+                "    <p>Saldo actual: Q" + cuenta.saldo +"</p>" +
+                "    <a class='usar-cuenta' data-cuenta='"+ cuenta.idMon +"'>Usar cuenta</a>" +
+                "</div></div>");
+              });
+
+              refreshCuenta();
+          }
+        });
+    }
+
+    function getTarjetas() {
+        $('.tarjetas-container').empty();
+
+        $.ajax
+        ({
+          type: "GET",
+          url: "/api/v2/clientes/" + clienteId + "/tarjetas",
+          dataType: 'json',
+          headers: {
+            "Authorization": "Bearer " + jwToken
+          },
+          success: function (data) {
+            console.log(data);
+
+            data.forEach(function(tarjeta){
+                $('.tarjetas-container').append("" +
+                "<div class='col-12'><div class='tarjeta-container'>" +
+                "    <h4>Tarjeta credito NO. " + tarjeta.numero + "</h4>" +
+                "    <p>Monto usado: Q" + tarjeta.montoUsado +"</p>" +
+                "    <p>Corte: " + tarjeta.corte +"</p>" +
+                "    <p>pago: " + tarjeta.pago +"</p>" +
+                "    <input type='number' id='monto-pago-tarjeta-" + tarjeta.idTarjeta + "' placeholder='Ingrese el monto a pagar'></input> <a class='pagar-tarjeta' data-tarjeta='" + tarjeta.idTarjeta + "'>Pagar</a>" +
+                "</div></div>");
+              });
+          }
+        });
+    }
+
+    function getPrestamos() {
+        $('.prestamos-container').empty();
+
+        $.ajax
+        ({
+          type: "GET",
+          url: "/api/v2/clientes/" + clienteId + "/prestamos",
+          dataType: 'json',
+          headers: {
+            "Authorization": "Bearer " + jwToken
+          },
+          success: function (data) {
+            console.log(data);
+
+            data.forEach(function(prestamo){
+                $('.prestamos-container').append("" +
+                "<div class='prestamo-container'>" +
+                "    <h4>Prestamo NO. " + prestamo.idPrestamo + "</h4>" +
+                "    <p>Saldo a pagar: Q" + prestamo.saldo +"</p>" +
+                "    <input type='number' id='monto-pago-prestamo-" + prestamo.idPrestamo + "' placeholder='Ingrese el monto a pagar'></input> <a class='pagar-prestamo' data-prestamo='" + prestamo.idPrestamo + "'>Pagar</a>" +
+                "</div>");
+              });
+          }
+        });
+    }
+
+    function getServicios() {
+        $('.servicios-container').empty();
+
+        $.ajax
+        ({
+          type: "GET",
+          url: "/api/v2/servicios",
+          dataType: 'json',
+          headers: {
+            "Authorization": "Bearer " + jwToken
+          },
+          success: function (data) {
+            console.log(data);
+
+            data.forEach(function(servicio){
+                $('.servicios-container').append("" +
+                "<div class='servicio-container'>" +
+                "    <h4>Servicio " + servicio.tipo + "</h4>" +
+                "    <p>Verificador: " + servicio.verificador +"</p>" +
+                "    <input type='text' id='correlativo-pago-servicio-" + servicio.idServicio + "' placeholder='Ingrese el correlativo'></input>" +
+                "    <input type='number' id='monto-pago-servicio-" + servicio.idServicio + "' placeholder='Ingrese el monto a pagar'></input> <a class='pagar-servicio' data-servicio='" + servicio.idServicio + "'>Pagar</a>" +
+                "</div>");
+              });
+          }
+        });
+    }
+
+    function addPago() {
+        var today = new Date();
+        var pagar = false;
+        var correlativo = today.getTime();
+        var monto = 0;
+
+        if (prestamoId > 0) {
+            monto = $('#monto-pago-prestamo-' + prestamoId).val();
+
+            if (monto > 0) {
+                pagar = true;
+            } else {
+                alert('El monto debe ser mayor a cero');
+                pagar = false;
+            }
+        }
+
+        if (tarjetaId > 0) {
+            monto = $('#monto-pago-tarjeta-' + tarjetaId).val();
+
+            if (monto > 0) {
+                pagar = true;
+            } else {
+                alert('El monto debe ser mayor a cero');
+                pagar = false;
+            }
+        }
+
+        if (servicioId > 0) {
+            monto = $('#monto-pago-servicio-' + servicioId).val();
+            correlativo = $('#correlativo-pago-servicio-' + servicioId).val();
+
+            if (correlativo !== '') {
+                pagar = true;
+            } else {
+                alert('El correlativo no puede estar vacio');
+                pagar = false;
+            }
+
+            if (monto > 0) {
+                pagar = true;
+            } else {
+                alert('El monto debe ser mayor a cero');
+                pagar = false;
+            }
+        }
+
+        if (cuentaId > 0) {
+            pagar = true;
+        } else {
+            alert('Debes seleccionar una cuenta para poder realizar el pago');
+            pagar = false;
+        }
+
+        if (pagar) {
+            var pago = {
+                correlativo: correlativo,
+                monto: monto,
+                fecha: new Date(),
+                idPrestamo: prestamoId,
+                idServicio: servicioId,
+                idTarjeta: tarjetaId
+            }
+
+            $.ajax({
+                url: "/api/v2/cuentas/" + cuentaId + "/pagos",
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                headers: {
+                    "Authorization": "Bearer " + jwToken
+                  },
+                success: function (data) {
+                    alert("Pago realizado. NO." + data.idPago + " Fecha:" + data.fecha + " Correlativo:" + data.correlativo);
+
+                    if (servicioId > 0) {
+                        getServicios();
+                    }
+
+                    if (prestamoId > 0) {
+                        getPrestamos();
+                    }
+
+                    if (tarjetaId > 0) {
+                        getTarjetas();
+                    }
+
+                    getCuentas();
+                },
+                data: JSON.stringify(pago)
+            });
+        }
+    }
+
+    function refreshCuenta() {
+        $('.cuenta-container').removeClass('selected');
+        if (cuentaId > 0) {
+            $('.cuenta-container-' + cuentaId).addClass('selected');
+            $('.cuenta-seleccionada').html("Cuenta seleccionada NO." + cuentaId);
+        } else {
+            $('.cuenta-seleccionada').html("Ninguna cuenta seleccionada");
+        }
+    }
+
+    function initPage() {
+        getCuentas();
+        getPrestamos();
+        getTarjetas();
+        getServicios();
+    }
+
+    $(function() {
+        var $body = $('body');
+        verifyUser();
+
+        $body.on('click', '.usar-cuenta', function() {
+            var cuenta = $(this).data("cuenta");
+            cuentaId = cuenta;
+            refreshCuenta();
+        });
+
+
+
+        $body.on('click', '.pagar-tarjeta', function() {
+            var tarjeta = $(this).data("tarjeta");
+            prestamoId = 0;
+            servicioId = 0;
+            tarjetaId = tarjeta;
+            addPago();
+        });
+
+        $body.on('click', '.pagar-prestamo', function() {
+            var prestamo = $(this).data("prestamo");
+            prestamoId = prestamo;
+            servicioId = 0;
+            tarjetaId = 0;
+            addPago();
+        });
+
+        $body.on('click', '.pagar-servicio', function() {
+            var servicio = $(this).data("servicio");
+            prestamoId = 0;
+            servicioId = servicio;
+            tarjetaId = 0;
+            addPago();
+        });
+    });
+
+</script>
+</html>

@@ -1,12 +1,9 @@
 package com.bank.bankSite.controller;
 
-import com.bank.bankSite.model.Cheque;
-import com.bank.bankSite.model.Cliente;
-import com.bank.bankSite.model.Cuenta;
-import com.bank.bankSite.repository.ChequeRepository;
+import com.bank.bankSite.model.*;
+import com.bank.bankSite.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.bank.bankSite.repository.CuentaRepository;
 import com.bank.bankSite.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,6 +21,18 @@ public class CuentaController {
 
     @Autowired
     private ChequeRepository chequeRepository;
+
+    @Autowired
+    private PagoRepository pagoRepository;
+
+    @Autowired
+    private TarjetaRepository tarjetaRepository;
+
+    @Autowired
+    private PrestamoRepository prestamoRepository;
+
+    @Autowired
+    private ServicioRepository servicioRepository;
 
     /**
      * Update product response entity.
@@ -97,5 +106,59 @@ public class CuentaController {
         chequeDetails.setCuenta(cuenta);
         final Cheque chequeNuevo = chequeRepository.save(chequeDetails);
         return ResponseEntity.ok(chequeNuevo);
+    }
+
+    /**
+     * @param cuentaId    the product id
+     * @param pagoDetails the product details
+     * @return the response entity
+     * @throws ResourceNotFoundException the resource not found exception
+     */
+    @PostMapping("v2/cuentas/{id}/pagos")
+    public ResponseEntity<Pago> createPago(
+            @PathVariable(value = "id") Long cuentaId, @Valid @RequestBody Pago pagoDetails)
+            throws ResourceNotFoundException {
+
+        Cuenta cuenta =
+                cuentaRepository
+                        .findById(cuentaId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Cuenta not found on :: " + cuentaId));
+
+        if (pagoDetails.getIdPrestamo() > 0) {
+            Prestamo prestamo =
+                    prestamoRepository
+                            .findById((long) pagoDetails.getIdPrestamo())
+                            .orElseThrow(() -> new ResourceNotFoundException("Prestamo not found on :: " + pagoDetails.getIdPrestamo()));
+
+            pagoDetails.setPrestamo(prestamo);
+            prestamo.setSaldo(prestamo.getSaldo() - pagoDetails.getMonto());
+            prestamoRepository.save(prestamo);
+        }
+
+        if (pagoDetails.getIdServicio() > 0) {
+            Servicio servicio =
+                    servicioRepository
+                            .findById((long) pagoDetails.getIdServicio())
+                            .orElseThrow(() -> new ResourceNotFoundException("Servicio not found on :: " + pagoDetails.getIdServicio()));
+
+            pagoDetails.setServicio(servicio);
+        }
+
+        if (pagoDetails.getIdTarjeta() > 0) {
+            Tarjeta tarjeta =
+                    tarjetaRepository
+                            .findById((long) pagoDetails.getIdTarjeta())
+                            .orElseThrow(() -> new ResourceNotFoundException("Tarjeta not found on :: " + pagoDetails.getIdTarjeta()));
+
+            pagoDetails.setTarjeta(tarjeta);
+            tarjeta.setMontoUsado(tarjeta.getMontoUsado() - pagoDetails.getMonto());
+            tarjetaRepository.save(tarjeta);
+        }
+
+        cuenta.setSaldo(cuenta.getSaldo() - pagoDetails.getMonto());
+        cuentaRepository.save(cuenta);
+        pagoDetails.setCuenta(cuenta);
+        final Pago pagoNuevo = pagoRepository.save(pagoDetails);
+        return ResponseEntity.ok(pagoNuevo);
     }
 }

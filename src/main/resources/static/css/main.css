@@ -32,11 +32,16 @@ max-width: 100px;
     border-radius: 50px;
 }
 
-.cuenta-container, .prestamo-container, .tarjeta-container {
+.cuenta-container, .prestamo-container, .tarjeta-container, .servicio-container {
     border: 2px solid cadetblue;
     padding: 10px;
     border-radius: 20px;
     margin-bottom: 15px;
+}
+
+.cuenta-container.selected {
+    border-color: green !important;
+    background-color: rgba(0,0,0,.2);
 }
 
 .cheque-container {

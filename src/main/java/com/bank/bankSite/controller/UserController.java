@@ -23,6 +23,11 @@ public class UserController {
         return "consultas"; //view
     }
 
+    @GetMapping("/user/pagos")
+    public String pagosAction(Model model) {
+        return "pagos"; //view
+    }
+
     @GetMapping("/user/suggestion")
     public String suggestionAction(Model model) {
         return "loggedSuggestion"; //view

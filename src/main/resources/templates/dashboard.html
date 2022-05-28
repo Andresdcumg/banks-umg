@@ -153,8 +153,10 @@
     }
 
     function addTarjeta() {
+        var today = new Date();
+
         var tarjeta = {
-            numero: generateRandomInteger(10),
+            numero: today.getTime(),
             titular: clienteName,
             cvv: generateRandomInteger(3),
             idCliente: clienteId,

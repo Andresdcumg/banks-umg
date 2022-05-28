@@ -40,6 +40,13 @@ public class Pago {
     private Servicio servicio;
 
     @Transient
+    public int idTarjeta;
+
+    @ManyToOne
+    @JoinColumn(name = "IdTarjeta", nullable = true)
+    private Tarjeta tarjeta;
+
+    @Transient
     public int idCuenta;
 
     @ManyToOne
@@ -124,5 +131,21 @@ public class Pago {
 
     public void setCuenta(Cuenta cuenta) {
         this.cuenta = cuenta;
+    }
+
+    public int getIdTarjeta() {
+        return idTarjeta;
+    }
+
+    public void setIdTarjeta(int idTarjeta) {
+        this.idTarjeta = idTarjeta;
+    }
+
+    public Tarjeta getTarjeta() {
+        return tarjeta;
+    }
+
+    public void setTarjeta(Tarjeta tarjeta) {
+        this.tarjeta = tarjeta;
     }
 }
