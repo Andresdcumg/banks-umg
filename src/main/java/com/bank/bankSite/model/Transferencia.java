@@ -18,17 +18,29 @@ public class Transferencia {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long IdTransferencia;
 
-    @Column(name = "cuentaDebito", nullable = false)
-    private long cuentaDebito;
+    @Transient
+    public int idCuentaDebito;
 
-    @Column(name = "cuentaCredito", nullable = false)
-    private long cuentaCredito;
+    @ManyToOne
+    @JoinColumn(name = "cuentaDebito", nullable = false)
+    private Cuenta cuentaDebito;
+
+    @Transient
+    public int idCuentaCredito;
+
+    @ManyToOne
+    @JoinColumn(name = "cuentaCredito", nullable = false)
+    private Cuenta cuentaCredito;
 
     @Column(name = "tipo", nullable = false)
     private String tipo = TIPO_PROPIA;
 
-    @Column(name = "IdBanco", nullable = false)
-    private long IdBanco;
+    @Transient
+    public int idBanco;
+
+    @ManyToOne
+    @JoinColumn(name = "IdBanco")
+    private Banco banco;
 
     @Column(name = "monto", nullable = false)
     private float monto;
@@ -52,22 +64,6 @@ public class Transferencia {
         IdTransferencia = idTransferencia;
     }
 
-    public long getCuentaDebito() {
-        return cuentaDebito;
-    }
-
-    public void setCuentaDebito(long cuentaDebito) {
-        this.cuentaDebito = cuentaDebito;
-    }
-
-    public long getCuentaCredito() {
-        return cuentaCredito;
-    }
-
-    public void setCuentaCredito(long cuentaCredito) {
-        this.cuentaCredito = cuentaCredito;
-    }
-
     public String getTipo() {
         return tipo;
     }
@@ -77,11 +73,11 @@ public class Transferencia {
     }
 
     public long getIdBanco() {
-        return IdBanco;
+        return idBanco;
     }
 
-    public void setIdBanco(long idBanco) {
-        IdBanco = idBanco;
+    public void setIdBanco(int idBanco) {
+        this.idBanco = idBanco;
     }
 
     public float getMonto() {
@@ -114,5 +110,45 @@ public class Transferencia {
 
     public void setRechazadaEl(Date rechazadaEl) {
         this.rechazadaEl = rechazadaEl;
+    }
+
+    public int getIdCuentaDebito() {
+        return idCuentaDebito;
+    }
+
+    public void setIdCuentaDebito(int idCuentaDebito) {
+        this.idCuentaDebito = idCuentaDebito;
+    }
+
+    public Cuenta getCuentaDebito() {
+        return cuentaDebito;
+    }
+
+    public void setCuentaDebito(Cuenta cuentaDebito) {
+        this.cuentaDebito = cuentaDebito;
+    }
+
+    public int getIdCuentaCredito() {
+        return idCuentaCredito;
+    }
+
+    public void setIdCuentaCredito(int idCuentaCredito) {
+        this.idCuentaCredito = idCuentaCredito;
+    }
+
+    public Cuenta getCuentaCredito() {
+        return cuentaCredito;
+    }
+
+    public void setCuentaCredito(Cuenta cuentaCredito) {
+        this.cuentaCredito = cuentaCredito;
+    }
+
+    public Banco getBanco() {
+        return banco;
+    }
+
+    public void setBanco(Banco banco) {
+        this.banco = banco;
     }
 }

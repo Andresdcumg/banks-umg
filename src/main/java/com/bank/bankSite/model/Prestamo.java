@@ -12,10 +12,6 @@ public class Prestamo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long IdPrestamo;
-
-    @Column(name = "IdCliente", nullable = false)
-    private long idCliente;
-
     @Column(name = "monto", nullable = false)
     private float monto;
 
@@ -24,6 +20,13 @@ public class Prestamo {
 
     @Column(name = "pago", nullable = false)
     private Date pago;
+
+    @Transient
+    public int idCliente;
+
+    @ManyToOne
+    @JoinColumn(name = "IdCliente")
+    private Cliente cliente;
 
     public long getIdPrestamo() {
         return IdPrestamo;
@@ -37,7 +40,7 @@ public class Prestamo {
         return idCliente;
     }
 
-    public void setIdCliente(long idCliente) {
+    public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
     }
 
@@ -63,5 +66,13 @@ public class Prestamo {
 
     public void setPago(Date pago) {
         this.pago = pago;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }

@@ -25,9 +25,6 @@ public class Tarjeta {
     @Column(name = "vencimiento", nullable = true)
     private Date vencimiento;
 
-    @Column(name = "IdCliente", nullable = false)
-    private long idCliente;
-
     @Column(name = "montoAutorizado", nullable = false)
     private float montoAutorizado;
 
@@ -39,6 +36,13 @@ public class Tarjeta {
 
     @Column(name = "pago", nullable = false)
     private Date pago;
+
+    @Transient
+    public int idCliente;
+
+    @ManyToOne
+    @JoinColumn(name = "IdCliente")
+    private Cliente cliente;
 
     public long getIdTarjeta() {
         return IdTarjeta;
@@ -84,7 +88,7 @@ public class Tarjeta {
         return idCliente;
     }
 
-    public void setIdCliente(long idCliente) {
+    public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
     }
 
@@ -118,5 +122,13 @@ public class Tarjeta {
 
     public void setPago(Date pago) {
         this.pago = pago;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }

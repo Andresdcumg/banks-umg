@@ -14,9 +14,6 @@ public class Cheque {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long IdCheque;
 
-    @Column(name = "IdCuenta", nullable = false)
-    private long idCuenta;
-
     @Column(name = "receptor", nullable = false)
     private String receptor;
 
@@ -34,6 +31,13 @@ public class Cheque {
     @Column(name = "rechazadoEl", nullable = true)
     private Date rechazadoEl;
 
+    @Transient
+    public int idCuenta;
+
+    @ManyToOne
+    @JoinColumn(name = "IdCuenta")
+    private Cuenta cuenta;
+
     public long getIdCheque() {
         return IdCheque;
     }
@@ -46,7 +50,7 @@ public class Cheque {
         return idCuenta;
     }
 
-    public void setIdCuenta(long idCuenta) {
+    public void setIdCuenta(int idCuenta) {
         this.idCuenta = idCuenta;
     }
 
@@ -88,5 +92,13 @@ public class Cheque {
 
     public void setRechazadoEl(Date rechazadoEl) {
         this.rechazadoEl = rechazadoEl;
+    }
+
+    public Cuenta getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
     }
 }

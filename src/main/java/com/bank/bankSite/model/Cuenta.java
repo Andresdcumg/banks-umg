@@ -15,14 +15,18 @@ public class Cuenta {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long IdMon;
 
-    @Column(name = "IdCliente", nullable = false)
-    private long idCliente;
-
     @Column(name = "tipo", nullable = false)
     private String tipo = TIPO_MONETARIA;
 
     @Column(name = "Saldo", nullable = false)
     private float saldo;
+
+    @Transient
+    public int idCliente;
+
+    @ManyToOne
+    @JoinColumn(name = "IdCliente")
+    private Cliente cliente;
 
     public long getIdMon() {
         return IdMon;
@@ -36,7 +40,7 @@ public class Cuenta {
         return idCliente;
     }
 
-    public void setIdCliente(long idCliente) {
+    public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
     }
 
@@ -46,5 +50,21 @@ public class Cuenta {
 
     public void setSaldo(float saldo) {
         this.saldo = saldo;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }

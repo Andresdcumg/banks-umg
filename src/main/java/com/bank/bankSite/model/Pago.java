@@ -14,15 +14,6 @@ public class Pago {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long IdPago;
 
-    @Column(name = "IdPrestamo", nullable = true)
-    private long IdPrestamo;
-
-    @Column(name = "IdServicio", nullable = true)
-    private long IdServicio;
-
-    @Column(name = "IdCuenta", nullable = false)
-    private long IdCuenta;
-
     @Column(name = "correlativo", nullable = false)
     private String correlativo;
 
@@ -34,36 +25,33 @@ public class Pago {
     @Column(name = "fecha", nullable = false)
     private Date fecha;
 
+    @Transient
+    public int idPrestamo;
+
+    @ManyToOne
+    @JoinColumn(name = "IdPrestamo", nullable = true)
+    private Prestamo prestamo;
+
+    @Transient
+    public int idServicio;
+
+    @ManyToOne
+    @JoinColumn(name = "IdServicio", nullable = true)
+    private Servicio servicio;
+
+    @Transient
+    public int idCuenta;
+
+    @ManyToOne
+    @JoinColumn(name = "IdCuenta", nullable = false)
+    private Cuenta cuenta;
+
     public long getIdPago() {
         return IdPago;
     }
 
     public void setIdPago(long idPago) {
         IdPago = idPago;
-    }
-
-    public long getIdPrestamo() {
-        return IdPrestamo;
-    }
-
-    public void setIdPrestamo(long idPrestamo) {
-        IdPrestamo = idPrestamo;
-    }
-
-    public long getIdServicio() {
-        return IdServicio;
-    }
-
-    public void setIdServicio(long idServicio) {
-        IdServicio = idServicio;
-    }
-
-    public long getIdCuenta() {
-        return IdCuenta;
-    }
-
-    public void setIdCuenta(long idCuenta) {
-        IdCuenta = idCuenta;
     }
 
     public String getCorrelativo() {
@@ -88,5 +76,53 @@ public class Pago {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    public int getIdPrestamo() {
+        return idPrestamo;
+    }
+
+    public void setIdPrestamo(int idPrestamo) {
+        this.idPrestamo = idPrestamo;
+    }
+
+    public Prestamo getPrestamo() {
+        return prestamo;
+    }
+
+    public void setPrestamo(Prestamo prestamo) {
+        this.prestamo = prestamo;
+    }
+
+    public int getIdServicio() {
+        return idServicio;
+    }
+
+    public void setIdServicio(int idServicio) {
+        this.idServicio = idServicio;
+    }
+
+    public Servicio getServicio() {
+        return servicio;
+    }
+
+    public void setServicio(Servicio servicio) {
+        this.servicio = servicio;
+    }
+
+    public int getIdCuenta() {
+        return idCuenta;
+    }
+
+    public void setIdCuenta(int idCuenta) {
+        this.idCuenta = idCuenta;
+    }
+
+    public Cuenta getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
     }
 }
